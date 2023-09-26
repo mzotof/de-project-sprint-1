@@ -9,5 +9,5 @@ with order_sum_cost as (
 )
 select
     user_id,
-    ((row_number() over (order by sum_cost) - 1) * 5 / (select count(1) from order_sum_cost)) + 1 as monetary_value
+    ntile(5) over (order by sum_cost) as monetary_value
 from order_sum_cost;

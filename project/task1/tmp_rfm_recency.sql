@@ -9,5 +9,5 @@ with last_order_ts as (
 )
 select
     user_id,
-    ((row_number() over (order by ts nulls first) - 1) * 5 / (select count(1) from last_order_ts)) + 1 as recency
+    ntile(5) over (order by ts nulls first) as recency
 from last_order_ts;

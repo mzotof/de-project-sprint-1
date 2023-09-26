@@ -9,5 +9,5 @@ with order_cnt as (
 )
 select
     user_id,
-    ((row_number() over (order by cnt) - 1) * 5 / (select count(1) from order_cnt)) + 1 as frequency
+    ntile(5) over (order by cnt) as frequency
 from order_cnt;

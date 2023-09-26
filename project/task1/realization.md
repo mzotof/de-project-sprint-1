@@ -162,7 +162,7 @@ with last_order_ts as (
 )
 select
     user_id,
-    ((row_number() over (order by ts nulls first) - 1) * 5 / (select count(1) from last_order_ts)) + 1 as recency
+    ntile(5) over (order by ts nulls first) as recency
 from last_order_ts;
 
 truncate table analysis.tmp_rfm_frequency;
@@ -176,7 +176,7 @@ with order_cnt as (
 )
 select
     user_id,
-    ((row_number() over (order by cnt) - 1) * 5 / (select count(1) from order_cnt)) + 1 as frequency
+    ntile(5) over (order by cnt) as frequency
 from order_cnt;
 
 truncate table analysis.tmp_rfm_monetary_value;
@@ -190,7 +190,7 @@ with order_sum_cost as (
 )
 select
     user_id,
-    ((row_number() over (order by sum_cost) - 1) * 5 / (select count(1) from order_sum_cost)) + 1 as monetary_value
+    ntile(5) over (order by sum_cost) as monetary_value
 from order_sum_cost;
 
 truncate analysis.dm_rfm_segments;
